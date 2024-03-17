@@ -1,0 +1,1 @@
+Use this directory to store your OpenAPI specifications and any generated documentation. If you're using gRPC, include your proto files and generated docs here.
