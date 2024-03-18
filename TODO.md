@@ -2,20 +2,26 @@
 
 ## Immediate
 
-- [ ] Investigate Make on Windows issue.
-- [ ] Set up initial `docs/` folder structure.
+- [ ] Add detailed logging to both server and client
+- [ ] Write basic unit tests for existing server and client code.
 - [ ] Usage of env variables and flags for scalable and secure solutions
-- [ ] tlsConfig.BuildNameToCertificate is depricated
+
  
 ## Short-Term
 
-- [ ] Setup the docs/setup.md
-- [ ] Implement mTLS in server-client communication.
-- [ ] Write unit tests for HTTP handlers.
-- [ ] Implement linters and strategies and add them within an ADR.
+- [ ] Harden TLS configuration for production
+- [ ] Implement the primary API routes on the server
+- [ ] Start documenting API endpoints and setup instructions
+- [ ] Write unit tests for HTTP handlers
+- [ ] Implement linters and strategies and add them within an ADR
+- [ ] tlsConfig.BuildNameToCertificate is depricated
 
 ## Long-Term
 
+- [ ] Implement advanced authentication and authorization mechanisms
+- [ ] Optimize performance based on profiling results
+- [ ] Dockerize (containerize) the server and client applications
+- [ ] Set up a basic CI/CD pipeline for automated testing and deployment
 - [ ] Explore integration with OpenAPI for automated API documentation.
 - [ ] Research gRPC for potential future use.
 - [ ] Build docs/contributing.md and include [Trunk Based Development](https://trunkbaseddevelopment.com/) and [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
@@ -25,6 +31,12 @@
 ## Done
 
 - [x] Set up project repository.
+- [x] Set up basic server and client with mTLS
+- [x] Setup scripts for certificates and dependencies
+- [x] Implement mTLS in server-client communication
+- [x] Investigate Make on Windows issue.
+- [x] Set up initial `docs/` folder structure.
+- [x] Setup the docs/setup.md
 
 ## Docs & Reads
 

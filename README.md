@@ -1,6 +1,8 @@
 # goexplorer
 Explorartion of Go related topics. oapi generator, grpc, algorithms and datastructures
 
+- Building the [Data Structure Operations API](docs/service_Data_Structure_Operations.md)
+
 ## Repository structure
 
 ```
