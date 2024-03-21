@@ -1,0 +1,2 @@
+proxy: myproxy.net
+caCerts: [".private/ca.crt"]

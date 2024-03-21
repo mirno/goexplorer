@@ -1,0 +1,9 @@
+server:
+  instanceUrl: localhost
+  protocol: https
+  port: 8443
+  proxyRequired: false
+  authenticationType:
+    MTLS:
+      certFile: ".private/server.crt"
+      keyFile: ".private/server.key"

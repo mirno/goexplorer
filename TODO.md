@@ -10,7 +10,7 @@
 ## Short-Term
 
 - [ ] Harden TLS configuration for production
-- [ ] 
+- [ ] Create proto files and experiment with gRPC
 - [ ] Implement the primary API routes on the server
 - [ ] Start documenting API endpoints and setup instructions
 - [ ] Write unit tests for HTTP handlers
@@ -26,7 +26,7 @@
 - [ ] Set up a basic CI/CD pipeline for automated testing and deployment
 - [ ] Explore integration with OpenAPI for automated API documentation.
 - [ ] Research gRPC for potential future use.
-- [ ] Build docs/contributing.md and include [Trunk Based Development](https://trunkbaseddevelopment.com/) and [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
+- [ ] Build a commit message template (~/.gitmessage.txt) and integraite with a commit hook / Pipeline
 - [ ] Create ADR and docs for [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
 - [ ] [Open Telemetry implementation](https://github.com/open-telemetry/opentelemetry-go)
 - [ ] Investigate [websocket](https://thinhdanggroup.github.io/websocket-vs-http2/) implementation
@@ -39,6 +39,8 @@
 - [x] Investigate Make on Windows issue.
 - [x] Set up initial `docs/` folder structure.
 - [x] Setup the docs/setup.md
+- [x] Build docs/contributing.md and include [Trunk Based Development](https://trunkbaseddevelopment.com/) and [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
+
 
 ## Docs & Reads
 
