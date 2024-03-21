@@ -46,3 +46,16 @@ func InitializeConfig(envConfigFile string) (*Config, error) {
 
     return &conf, nil
 }
+
+func LoadConfig(configPath, configName string) (*AppConfig, error){
+	viper.AddConfigPath(configPath)
+	viper.SetConfigName(configName)
+	viper.SetConfigType("yaml")
+
+	var config AppConfig
+
+	if err := viper.ReadInConfig(); err != nil {
+		return nil, err
+	}
+	return &config, nil
+}

@@ -11,6 +11,19 @@ import (
 )
 
 // Docs: https://pkg.go.dev/github.com/mitchellh/mapstructure
+
+type AppConfig struct {
+	Drivers map[string]DriverConfig `mapsturcture:"drivers"`
+	CACerts []string    `mapstructure:"caCerts"`
+}
+
+type DriverConfig struct {
+    InstanceUrl        string         `mapstructure:"instanceUrl"`
+    Protocol           string         `mapstructure:"protocol"`
+    Port               int            `mapstructure:"port"`
+    ProxyRequired      bool           `mapstructure:"proxyRequired"`
+    AuthenticationType AuthConfig     `mapstructure:"authenticationType"`
+}
 type Config struct {
     Server ServerConfig `mapstructure:"server"`
     CACerts []string    `mapstructure:"caCerts"`

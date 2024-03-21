@@ -1,4 +1,4 @@
-server:
+driver1:
   instanceUrl: localhost
   protocol: https
   port: 8443
@@ -7,3 +7,17 @@ server:
     MTLS:
       certFile: ".private/server.crt"
       keyFile: ".private/server.key"
+
+driver2:
+  instanceUrl: localhost
+  protocol: https
+  port: 10443
+  proxyRequired: true
+  authenticationType:
+    MTLS:
+      certFile: ".private/server.crt"
+      keyFile: ".private/server.key"
+    OAuth2:
+         clientID: myID
+         clientSecret: mySecret
+         RefreshToken: MeRefreshToken
