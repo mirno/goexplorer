@@ -10,6 +10,7 @@
 ## Short-Term
 
 - [ ] Harden TLS configuration for production
+- [ ] 
 - [ ] Implement the primary API routes on the server
 - [ ] Start documenting API endpoints and setup instructions
 - [ ] Write unit tests for HTTP handlers
@@ -18,7 +19,8 @@
 
 ## Long-Term
 
-- [ ] Implement advanced authentication and authorization mechanisms
+- [ ] Implement advanced authentication and authorization mechanisms (OAUTH2)
+- [ ] Implement Lefthook with pre-commit and pre-push
 - [ ] Optimize performance based on profiling results
 - [ ] Dockerize (containerize) the server and client applications
 - [ ] Set up a basic CI/CD pipeline for automated testing and deployment
