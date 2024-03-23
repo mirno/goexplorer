@@ -47,6 +47,34 @@ func InitializeConfig(envConfigFile string) (*Config, error) {
     return &conf, nil
 }
 
+func InitializeAppConfig(envConfigFile string) (*AppConfig, error) {
+    var conf AppConfig
+
+    viper.SetConfigType("yaml")
+
+    // Load the default configuration
+    viper.SetConfigName("default")
+    viper.AddConfigPath("config") // Adjust the path to where your config files are located
+    if err := viper.ReadInConfig(); err != nil {
+        return nil, fmt.Errorf("error reading default config file: %w", err)
+    }
+
+    // If an environment-specific configuration file is provided, merge it
+    if envConfigFile != "" {
+        viper.SetConfigFile(filepath.Join("config", envConfigFile))
+        if err := viper.MergeInConfig(); err != nil {
+            return nil, fmt.Errorf("error merging environment-specific config file: %w", err)
+        }
+    }
+
+    // Unmarshal the combined configuration into the Config struct
+    if err := viper.Unmarshal(&conf); err != nil {
+        return nil, fmt.Errorf("error unmarshalling config: %w", err)
+    }
+
+    return &conf, nil
+}
+
 func LoadConfig(configPath, configName string) (*AppConfig, error){
 	viper.AddConfigPath(configPath)
 	viper.SetConfigName(configName)
