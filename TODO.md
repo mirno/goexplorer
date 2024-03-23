@@ -2,13 +2,16 @@
 
 ## Immediate
 
-- [ ] Add detailed logging to both server and client
+
 - [ ] Write basic unit tests for existing server and client code.
-- [ ] Usage of env variables and flags for scalable and secure solutions
+
 
  
 ## Short-Term
 
+- [ ] Improve commitment strategies | Find a solution / tool
+- [ ] Add detailed logging to both server and client
+- [ ] Add Driver scalable config loader using maps
 - [ ] Harden TLS configuration for production
 - [ ] Create proto files and experiment with gRPC
 - [ ] Implement the primary API routes on the server
@@ -21,6 +24,7 @@
 
 - [ ] Implement advanced authentication and authorization mechanisms (OAUTH2)
 - [ ] Implement Lefthook with pre-commit and pre-push
+- [ ] Configure GIT for conventional commits using a gitmessage template
 - [ ] Optimize performance based on profiling results
 - [ ] Dockerize (containerize) the server and client applications
 - [ ] Set up a basic CI/CD pipeline for automated testing and deployment
@@ -30,6 +34,8 @@
 - [ ] Create ADR and docs for [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
 - [ ] [Open Telemetry implementation](https://github.com/open-telemetry/opentelemetry-go)
 - [ ] Investigate [websocket](https://thinhdanggroup.github.io/websocket-vs-http2/) implementation
+- [ ] implement Logging, Tracing & Metrics Using tools like Grafana & Telemetry
+
 ## Done
 
 - [x] Set up project repository.
@@ -40,6 +46,7 @@
 - [x] Set up initial `docs/` folder structure.
 - [x] Setup the docs/setup.md
 - [x] Build docs/contributing.md and include [Trunk Based Development](https://trunkbaseddevelopment.com/) and [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
+- [x] Usage of env variables and flags with Viper for scalable and secure solutions
 
 
 ## Docs & Reads
@@ -48,6 +55,7 @@
 - [ ] [System design](https://bytebytego.com/courses/system-design-interview/foreword)
 - [ ] [Diagram as code](https://www.youtube.com/watch?v=jCd6XfWLZsg)
 - [ ] Logging, Tracing & Metrics [1](https://www.youtube.com/channel/UCZgt6AzoyjslHTC9dz0UoTw/community?lb=Ugkx6hFPFXZvllSwQ6UTJ7QYIiyzMyD9RTSS) [2](https://microsoft.github.io/code-with-engineering-playbook/observability/log-vs-metric-vs-trace/) [3](https://peter.bourgon.org/blog/2017/02/21/metrics-tracing-and-logging.html)
+- [x] [A Daily Practise of Empirical Software Design](https://www.youtube.com/watch?v=yBEcq23OgB4)
 
 ## References
 
