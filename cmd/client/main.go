@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/mirno/goexplorer/internal/drivers"
 	"github.com/mirno/goexplorer/pkg/config"
 	"github.com/mirno/goexplorer/pkg/utils"
 	"github.com/spf13/viper"
@@ -53,23 +54,23 @@ func main() {
     // Peek again to verify the pop
     peekItem(httpClient)
 	// Driver implementation
-	// // Initialize the StackClient
-	// client, err := drivers.NewStackClient(baseURL, cert, pool)
-	// utils.Assert(err)
+	// Initialize the StackClient
+	client, err := drivers.NewStackClient(baseURL, cert, pool)
+	utils.Assert(err)
 
-    // err = client.PushItem("bla")
-    // utils.Assert(err)
+    err = client.PushItem("bla")
+    utils.Assert(err)
 
-	// item, err := client.PeekItem()
-    // utils.Assert(err)
-    // fmt.Printf("Peeked item: %+v\n", item)
+	item, err := client.PeekItem()
+    utils.Assert(err)
+    fmt.Printf("Peeked item: %+v\n", item)
 
-    // err = client.PushItem(2)
-    // utils.Assert(err)
+    err = client.PushItem(2)
+    utils.Assert(err)
 
-	// item, err = client.PeekItem()
-    // utils.Assert(err)
-    // fmt.Printf("Peeked item: %+v\n", item)
+	item, err = client.PeekItem()
+    utils.Assert(err)
+    fmt.Printf("Peeked item: %+v\n", item)
 }
 
 func pushItem(client *http.Client, value interface{}) {
