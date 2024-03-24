@@ -2,7 +2,8 @@
 
 ## Immediate
 
-
+- [ ] Build GRPC variation of client/server Stack using proto generator
+- [ ] Define OpenAPISpec (OAS) for the stack implementation to generate server/client and MockServer
 - [ ] Write basic unit tests for existing server and client code.
 
 
@@ -10,7 +11,6 @@
 ## Short-Term
 
 - [ ] Improve commitment strategies | Find a solution / tool
-- [ ] Add detailed logging to both server and client
 - [ ] Add Driver scalable config loader using maps
 - [ ] Harden TLS configuration for production
 - [ ] Create proto files and experiment with gRPC
@@ -47,7 +47,7 @@
 - [x] Setup the docs/setup.md
 - [x] Build docs/contributing.md and include [Trunk Based Development](https://trunkbaseddevelopment.com/) and [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
 - [x] Usage of env variables and flags with Viper for scalable and secure solutions
-
+- [x] Add logging to both server and client
 
 ## Docs & Reads
 
