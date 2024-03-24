@@ -1,20 +1,22 @@
 package main
 
 import (
+	"bytes"
+	"crypto/tls"
+	"encoding/json"
 	"fmt"
+	"io"
 	"log"
+	"net/http"
 
 	"github.com/mirno/goexplorer/pkg/config"
 	"github.com/mirno/goexplorer/pkg/utils"
 	"github.com/spf13/viper"
 )
 
-// var(
-// 	caCertificatePath = ".private/ca.crt"
-// 	caCertificatekeyPath = ".private/ca.key"
-// 	serverCertificatePath = ".private/server.crt"
-// 	serverCertificateKeyPath = ".private/server.key"
-// )
+const baseURL = "https://localhost:8443"
+
+
 func main() {
     config.LoadDefaultConfig() // Load default.yaml configurations
 
@@ -24,59 +26,115 @@ func main() {
 
 	conf, err := config.InitializeConfig("config.dt.yaml")
 	utils.Assert(err)
-    log.Printf("Loaded Config: %+v\n", conf)
+    // log.Printf("Loaded Config: %+v\n", conf)
 
+	pool := config.NewCertificatePool(conf)
+	cert := config.LoadMTLSClientCert(&conf.Server.AuthenticationType.MTLS)
 
+	tlsConfig := &tls.Config{
+		Certificates: []tls.Certificate{cert},
+		RootCAs: pool,
+	}
+	httpClient := &http.Client{
+        Transport: &http.Transport{
+            TLSClientConfig: tlsConfig,
+        },
+    }
 
-	// if err := viper.ReadInConfig(); err != nil {
-    //     log.Fatalf("Error reading config file: %s", err)
-    // }
+    // Push an item
+    pushItem(httpClient, "test item")
 
-    // // Attempt to read the configuration
-    // if err := viper.ReadInConfig(); err != nil {
-    //     log.Fatalf("Error reading config file: %s", err)
-    // }	
-	// // Unmarshall the configuration into the Config struct
-	// var conf config.Config
+    // Peek at the top item
+    peekItem(httpClient)
 
-	// if err := viper.Unmarshall(&conf); err != nil {
-	// 	log.Fatalf("Error unmarshalling config: %s", err)
-	// }
+    // Pop the top item
+    popItem(httpClient)
 
+    // Peek again to verify the pop
+    peekItem(httpClient)
+	// Driver implementation
+	// // Initialize the StackClient
+	// client, err := drivers.NewStackClient(baseURL, cert, pool)
+	// utils.Assert(err)
 
-	
-	// caCert, err := os.ReadFile(caCertificatePath)
-	// if err != nil{
-	// 	log.Fatalf("Reading server certificate: %s", err)
-	// }
-	// caCertPool := x509.NewCertPool()
-	// caCertPool.AppendCertsFromPEM(caCert)
+    // err = client.PushItem("bla")
+    // utils.Assert(err)
 
-	// clientCert, err := tls.LoadX509KeyPair(serverCertificatePath, serverCertificateKeyPath)
-	// if err != nil {
-	// 	log.Fatalf("Error loading server key par: %s", err)
-	// }
+	// item, err := client.PeekItem()
+    // utils.Assert(err)
+    // fmt.Printf("Peeked item: %+v\n", item)
 
-	// tlsConfig := &tls.Config{
-	// 	RootCAs: caCertPool,
-	// 	Certificates: []tls.Certificate{clientCert},
-	// }
+    // err = client.PushItem(2)
+    // utils.Assert(err)
 
-	// client := &http.Client{
-	// 	Transport: &http.Transport{
-	// 		TLSClientConfig: tlsConfig,
-	// 	},
-	// }
+	// item, err = client.PeekItem()
+    // utils.Assert(err)
+    // fmt.Printf("Peeked item: %+v\n", item)
+}
 
-	// resp, err := client.Get("https://localhost:8443")
-	// if err != nil {
-	// 	log.Fatalf("Reading response body: %s", err)
-	// }
-	// defer resp.Body.Close()
+func pushItem(client *http.Client, value interface{}) {
+    item := map[string]interface{}{"value": value}
+    jsonData, err := json.Marshal(item)
+    if err != nil {
+        log.Fatalf("Error marshalling JSON: %s", err)
+    }
 
-	// body, err := ioutil.ReadAll(resp.Body)
-    // if err != nil {
-    //     log.Fatalf("Reading response body: %s", err)
-    // }
-	// log.Printf("Server response: %s", body)
+    // Create a new request with PUT method
+    req, err := http.NewRequest(http.MethodPut, baseURL+"/stack", bytes.NewBuffer(jsonData))
+    if err != nil {
+        log.Fatalf("Error creating PUT request: %s", err)
+    }
+    req.Header.Set("Content-Type", "application/json")
+
+    // Send the request using the client
+    resp, err := client.Do(req)
+    if err != nil {
+        log.Fatalf("Error pushing item with PUT request: %s", err)
+    }
+    defer resp.Body.Close()
+
+    // Check the response status code
+    fmt.Println("Pushed item, status code:", resp.StatusCode)
+}
+
+func peekItem(client *http.Client) {
+    resp, err := client.Get(baseURL + "/stack")
+    if err != nil {
+        log.Fatalf("Error peeking item: %s", err)
+    }
+    defer resp.Body.Close()
+
+    fmt.Printf("Peek response status code: %d\n", resp.StatusCode)
+
+    if resp.StatusCode == http.StatusNoContent {
+        fmt.Println("The stack is empty.")
+        return
+    }
+
+    body, err := io.ReadAll(resp.Body)
+    if err != nil {
+        log.Fatalf("Error reading response body: %s", err)
+    }
+
+    fmt.Printf("Peeked item: %s\n", string(body))
+}
+
+func popItem(client *http.Client) {
+    req, err := http.NewRequest("POST", baseURL+"/stack", nil)
+    if err != nil {
+        log.Fatalf("Error creating request for pop: %s", err)
+    }
+
+    resp, err := client.Do(req)
+    if err != nil {
+        log.Fatalf("Error popping item: %s", err)
+    }
+    defer resp.Body.Close()
+
+    body, err := io.ReadAll(resp.Body)
+    if err != nil {
+        log.Fatalf("Error reading response body: %s", err)
+    }
+
+    fmt.Printf("Popped item: %s\n", string(body))
 }

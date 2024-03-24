@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+
+	"github.com/mirno/goexplorer/internal/app/handlers"
 )
 var(
 	caCertificatePath = ".private/ca.crt"
@@ -39,10 +41,24 @@ func main() {
 	// tlsConfig.BuildNameToCertificate()
 
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Hello, mTLS world!"))
 	})
+
+    http.HandleFunc("/stack", func(w http.ResponseWriter, r *http.Request) {
+        switch r.Method {
+        case http.MethodPut:
+            handlers.PushHandler(w, r)
+        case http.MethodPost:
+            handlers.PopHandler(w, r)
+        case http.MethodGet:
+            handlers.PeekHandler(w, r)
+        default:
+            http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+        }
+    })
+
 	server := &http.Server{
 		Addr: ":"+ strconv.Itoa(port),
 		TLSConfig: tlsConfig,	

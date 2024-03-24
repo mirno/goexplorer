@@ -3,7 +3,6 @@ package config
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"fmt"
 	"log"
 	"os"
 
@@ -28,7 +27,10 @@ type Config struct {
     Server ServerConfig `mapstructure:"server"`
     CACerts []string    `mapstructure:"caCerts"`
     Proxy   bool      `mapstructure:"proxyRequired"`
+	TLSConfig tls.Config
 }
+
+
 
 type ServerConfig struct {
     InstanceUrl        string      `mapstructure:"instanceUrl"`
@@ -74,18 +76,22 @@ func NewCertificatePool(config *Config ) (*x509.CertPool) {
 	return caCertPool
 }
 
-func LoadClientCert(config *MTLSConfig) (*tls.Certificate, error) {
+func LoadMTLSClientCert(config *MTLSConfig) (tls.Certificate) { 
 	if config.CertFile == "" || config.KeyFile == "" {
-		return nil, fmt.Errorf("CertFile or KeyFile not defined")
+		log.Printf("CertFile or KeyFile not defined")
 	}
 	clientCert, err := tls.LoadX509KeyPair(config.CertFile, config.KeyFile)
 	utils.Assert(err)
 
-	return &clientCert, nil
-
+	return clientCert
 }
 
-func LoadTLSConfig(config *MTLSConfig) error {
-	log.Print("Placeholder for loading TLS based on the config")
-	return nil
+func LoadClientCert(CertFile, KeyFile string ) (tls.Certificate) { 
+	if CertFile == "" || KeyFile == "" {
+		log.Printf("CertFile or KeyFile not defined")
+	}
+	clientCert, err := tls.LoadX509KeyPair(CertFile, KeyFile)
+	utils.Assert(err)
+
+	return clientCert
 }
