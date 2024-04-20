@@ -10,6 +10,7 @@
  
 ## Short-Term
 
+- [ ] install [chocolatey](https://chocolatey.org/)
 - [ ] Improve commitment strategies | Find a solution / tool
 - [ ] Add Driver scalable config loader using maps
 - [ ] Harden TLS configuration for production
@@ -22,6 +23,8 @@
 
 ## Long-Term
 
+- [ ] Investigate and build session based authentication using coockies in a browser based app.
+- [ ] Investigate and build token based authentication using JWT
 - [ ] Implement advanced authentication and authorization mechanisms (OAUTH2)
 - [ ] Implement Lefthook with pre-commit and pre-push
 - [ ] Configure GIT for conventional commits using a gitmessage template
@@ -35,6 +38,8 @@
 - [ ] [Open Telemetry implementation](https://github.com/open-telemetry/opentelemetry-go)
 - [ ] Investigate [websocket](https://thinhdanggroup.github.io/websocket-vs-http2/) implementation
 - [ ] implement Logging, Tracing & Metrics Using tools like Grafana & Telemetry
+- [ ] Setup [taskfile](https://taskfile.dev/) instead of Make on Windows
+- [ ] [Grafeas](https://github.com/grafeas/grafeas) metadata api
 
 ## Done
 

@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package stack;
+
+// The stack service definition
+
+service StackService {
+    // Pushes item onto the stack
+    rpc Push(PushRequest) returns (PushResponse) {}
+
+    // Pops an item from the stack
+    rpc Pop(PopRequest) returns (PopResponse) {}
+
+    // Peeks at the top item of the stack without removing
+    rpc Peek(PeekRequest) returns (PeekResponse) {}
+}
+
+// The request message containing the item to be pushed.
+message PushRequest {
+    string value = 1;
+}
+message PushResponse {
+    bool success = 1;
+}
+
+message PopRequest {
+    
+}
+message PopResponse {
+    string value = 1;
+    bool success = 2;
+}
+
+message PeekRequest {
+    
+}
+message PeekResponse {
+    string value = 1;
+    bool success = 2;
+}
