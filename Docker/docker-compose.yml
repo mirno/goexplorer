@@ -1,0 +1,133 @@
+version: '3.8'
+services:
+  zookeeper:
+    image: 'confluentinc/cp-zookeeper:latest'
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  nats:
+    image: nats:latest
+    hostname: nats
+    container_name: nats
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+
+  mysql:
+    image: mysql:8.0
+    hostname: mysql
+    container_name: datahub-mysql-1
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: datahub
+      MYSQL_DATABASE: datahub
+      MYSQL_USER: datahub
+      MYSQL_PASSWORD: datahub
+    volumes:
+      - mysql-data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  neo4j:
+    image: neo4j:4.2
+    hostname: neo4j
+    container_name: neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      NEO4J_AUTH: neo4j/datahub
+    volumes:
+      - neo4j-data:/data
+
+  datahub-gms:
+    image: 'acryldata/datahub-gms:head'
+    container_name: datahub-gms
+    depends_on:
+      - mysql
+      - neo4j
+    ports:
+      - "8080:8080"
+    environment:
+      DATAHUB_GMS_DB_URL: "jdbc:mysql://mysql:3306/datahub?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&createDatabaseIfNotExist=true"
+      DATAHUB_GMS_DB_USERNAME: datahub
+      DATAHUB_GMS_DB_PASSWORD: datahub
+      DATAHUB_GMS_HEARTBEAT_INTERVAL: 60000
+      DATAHUB_GMS_SERVICE_AUTH_DISABLED: 'true'
+      DATAHUB_GMS_SERVICE_MULTI_TENANT_ENABLED: 'false'
+      DATAHUB_GMS_GRAPH_SERVICE_IMPL: neo4j
+      ELASTICSEARCH_HOST: elasticsearch
+      ELASTICSEARCH_PORT: 9200
+      NEO4J_HOST: bolt://neo4j:7687
+      NEO4J_USERNAME: neo4j
+      NEO4J_PASSWORD: datahub
+      NATS_URL: nats://nats:4222
+
+  datahub-frontend:
+    image: 'acryldata/datahub-frontend-react:head'
+    container_name: datahub-frontend
+    depends_on:
+      - datahub-gms
+    ports:
+      - "9002:9002"
+    environment:
+      DATAHUB_GMS_HOST: datahub-gms
+      DATAHUB_GMS_PORT: 8080
+      DATAHUB_GMS_PROTOCOL: http
+      REACT_APP_LOCAL_INGESTION_ENDPOINT: http://localhost:9090
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+    container_name: elasticsearch
+    environment:
+      discovery.type: single-node
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+
+  datahub-mae-consumer:
+    image: 'acryldata/datahub-mae-consumer:head'
+    container_name: datahub-mae-consumer
+    depends_on:
+      - datahub-gms
+      - nats
+    environment:
+      NATS_URL: nats://nats:4222
+      DATAHUB_GMS_HOST: datahub-gms
+      DATAHUB_GMS_PORT: 8080
+
+  datahub-mce-consumer:
+    image: 'acryldata/datahub-mce-consumer:head'
+    container_name: datahub-mce-consumer
+    depends_on:
+      - datahub-gms
+      - nats
+    environment:
+      NATS_URL: nats://nats:4222
+      DATAHUB_GMS_HOST: datahub-gms
+      DATAHUB_GMS_PORT: 8080
+
+  datahub-ingestion:
+    image: 'acryldata/datahub-ingestion:head'
+    container_name: datahub-ingestion
+    depends_on:
+      - nats
+    environment:
+      NATS_URL: nats://nats:4222
+      DATAHUB_GMS_HOST: datahub-gms
+      DATAHUB_GMS_PORT: 8080
+    command: "datahub docker ingest-sample-data"
+
+volumes:
+  mysql-data:
+  neo4j-data:

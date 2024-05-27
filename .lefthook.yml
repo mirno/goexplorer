@@ -14,10 +14,8 @@ pre-commit:
       run: go test ./...
     go-vet:
       run: go vet ./...
-    go-lint:
-      run: golint ./...
-    go-sec:
-      run: gosec ./...
+    # go-lint: golangci-lint used
+    #   run: golint ./...
     go-mod-tidy:
       run: go mod tidy
     gofumpt:
@@ -30,3 +28,7 @@ pre-commit:
       run: golangci-lint run
     protolint:
       run: protolint lint
+pre-push:
+    commands:
+      go-sec:
+        run: gosec ./...
